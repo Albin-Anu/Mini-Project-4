@@ -1,0 +1,38 @@
+# Currency Converter Mini Project
+# Author: Albin Anu
+
+from forex_python.converter import CurrencyRates
+
+def main():
+    print("===== Currency Converter =====")
+    
+    c = CurrencyRates()
+
+    # Display supported currencies (optional)
+    print("\nCommon Currency Codes:")
+    print("USD - US Dollar")
+    print("INR - Indian Rupee")
+    print("EUR - Euro")
+    print("GBP - British Pound")
+    print("JPY - Japanese Yen")
+    print("AUD - Australian Dollar")
+
+    from_currency = input("\nEnter From Currency Code (e.g. USD, INR): ").upper()
+    to_currency = input("Enter To Currency Code (e.g. INR, USD): ").upper()
+
+    amount = float(input("Enter the amount to convert: "))
+
+    try:
+        result = c.convert(from_currency, to_currency, amount)
+        print(f"\n💱 {amount} {from_currency} = {result:.2f} {to_currency}")
+    except Exception as e:
+        print("\n❌ Error: Could not fetch conversion rate.")
+        print("Make sure the currency codes are correct and you are connected to the internet.")
+        print("Details:", e)
+
+    print("\nThank you for using Currency Converter! 😊")
+
+if __name__ == "__main__":
+    main()
+
+
