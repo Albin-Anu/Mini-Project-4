@@ -1,0 +1,58 @@
+# Stock Price Tracker Mini Project
+# Author: Albin Anu
+
+import yfinance as yf
+import pandas as pd
+import matplotlib.pyplot as plt
+
+def fetch_stock_data(ticker):
+    """Fetch live stock information."""
+    stock = yf.Ticker(ticker)
+    data = stock.history(period="1d")
+    
+    if data.empty:
+        print("❌ Invalid ticker or no data available.")
+        return
+    
+    current_price = data['Close'][-1]
+    prev_close = data['Close'][-2] if len(data) > 1 else current_price
+    change = current_price - prev_close
+    pct_change = (change / prev_close) * 100 if prev_close else 0
+    
+    print(f"\n📊 Stock: {ticker.upper()}")
+    print(f"Current Price: ₹{current_price:.2f}")
+    print(f"Previous Close: ₹{prev_close:.2f}")
+    print(f"Change: ₹{change:.2f} ({pct_change:.2f}%)")
+
+def plot_stock_history(ticker):
+    """Plot historical closing prices."""
+    stock = yf.Ticker(ticker)
+    hist = stock.history(period="1mo")  # last 1 month
+    
+    if hist.empty:
+        print("❌ No historical data found.")
+        return
+    
+    plt.figure(figsize=(10, 5))
+    plt.plot(hist.index, hist['Close'], label=f'{ticker.upper()} Closing Price')
+    plt.title(f'{ticker.upper()} - Last 1 Month Trend')
+    plt.xlabel('Date')
+    plt.ylabel('Price (₹)')
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
+def main():
+    print("===== Stock Price Tracker =====")
+    ticker = input("Enter the stock ticker (e.g. TATAPOWER.NS, ONGC.NS, RELIANCE.NS): ").upper()
+
+    fetch_stock_data(ticker)
+    
+    choice = input("\nDo you want to see the last 1-month price trend? (y/n): ").lower()
+    if choice == 'y':
+        plot_stock_history(ticker)
+    
+    print("\nThank you for using Stock Price Tracker! 📈")
+
+if __name__ == "__main__":
+    main()
